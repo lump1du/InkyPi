@@ -121,7 +121,17 @@ class WeatherDashboard(BasePlugin):
         template_params["birthdays"] = birthdays
         template_params["countdown"] = countdown_info
         template_params["current_week"] = datetime.now(tz).isocalendar()[1]
-        template_params["calendar_data"] = self.generate_calendar(tz, birthdays)
+
+        # Add calendar or transit data based on settings
+        display_mode = settings.get('rightPanelDisplay', 'calendar')
+        if display_mode == 'transit':
+            template_params["transit_data"] = self.get_transit_departures(settings, tz)
+            template_params["show_transit"] = True
+            template_params["show_calendar"] = False
+        else:
+            template_params["calendar_data"] = self.generate_calendar(tz, birthdays)
+            template_params["show_transit"] = False
+            template_params["show_calendar"] = True
 
         # Add countdown image if provided
         countdown_image = settings.get('countdownImage')
@@ -232,6 +242,92 @@ class WeatherDashboard(BasePlugin):
             }
         except Exception as e:
             logger.error(f"Failed to calculate countdown: {e}")
+            return None
+
+    def get_transit_departures(self, settings, tz):
+        """Fetch transit departure information from VBB API"""
+        station_id = settings.get('transitStationId', '').strip()
+        if not station_id:
+            return None
+
+        try:
+            duration = int(settings.get('transitDuration', 60))
+            lines_filter = settings.get('transitLines', '').strip()
+            direction_filter = settings.get('transitDirection', '').strip()
+
+            # VBB REST API
+            url = f"https://v6.vbb.transport.rest/stops/{station_id}/departures"
+            params = {
+                'duration': duration,
+                'results': 10  # Limit to 10 departures
+            }
+
+            response = requests.get(url, params=params, timeout=10)
+            if response.status_code != 200:
+                logger.error(f"Failed to fetch transit data: {response.status_code}")
+                return None
+
+            departures_data = response.json()
+            departures = []
+
+            # Parse lines filter
+            allowed_lines = set()
+            if lines_filter:
+                allowed_lines = {line.strip().upper() for line in lines_filter.split(',')}
+
+            for dep in departures_data.get('departures', []):
+                line_name = dep.get('line', {}).get('name', '')
+                direction = dep.get('direction', '')
+                when = dep.get('when')
+                delay = dep.get('delay', 0)  # Delay in seconds
+
+                # Filter by line if specified
+                if allowed_lines:
+                    # Check if line name starts with any allowed line
+                    if not any(line_name.upper().startswith(allowed) for allowed in allowed_lines):
+                        continue
+
+                # Filter by direction if specified
+                if direction_filter and direction_filter.lower() not in direction.lower():
+                    continue
+
+                # Parse departure time
+                if when:
+                    try:
+                        dep_time = datetime.fromisoformat(when.replace('Z', '+00:00'))
+                        dep_time = dep_time.astimezone(tz)
+                        now = datetime.now(tz)
+
+                        # Calculate minutes until departure
+                        minutes_until = int((dep_time - now).total_seconds() / 60)
+
+                        # Only show future departures
+                        if minutes_until < 0:
+                            continue
+
+                        departures.append({
+                            'line': line_name,
+                            'direction': direction,
+                            'time': dep_time.strftime('%H:%M'),
+                            'minutes': minutes_until,
+                            'delay': int(delay / 60) if delay else 0,  # Convert to minutes
+                            'is_delayed': delay and delay > 60  # Delayed if more than 1 minute
+                        })
+                    except Exception as e:
+                        logger.debug(f"Error parsing departure time: {e}")
+                        continue
+
+            # Sort by departure time
+            departures.sort(key=lambda x: x['minutes'])
+
+            return {
+                'station_id': station_id,
+                'departures': departures[:8],  # Limit to 8 visible departures
+                'count': len(departures)
+            }
+
+        except Exception as e:
+            logger.error(f"Failed to fetch transit departures: {e}")
             return None
 
     def generate_calendar(self, tz, birthdays):
