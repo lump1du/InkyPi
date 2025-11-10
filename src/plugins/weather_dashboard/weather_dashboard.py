@@ -7,6 +7,7 @@ from datetime import datetime, timezone, timedelta
 import pytz
 import csv
 import math
+import calendar
 
 logger = logging.getLogger(__name__)
 
@@ -120,6 +121,7 @@ class WeatherDashboard(BasePlugin):
         template_params["birthdays"] = birthdays
         template_params["countdown"] = countdown_info
         template_params["current_week"] = datetime.now(tz).isocalendar()[1]
+        template_params["calendar_data"] = self.generate_calendar(tz, birthdays)
 
         # Add countdown image if provided
         countdown_image = settings.get('countdownImage')
@@ -231,6 +233,55 @@ class WeatherDashboard(BasePlugin):
         except Exception as e:
             logger.error(f"Failed to calculate countdown: {e}")
             return None
+
+    def generate_calendar(self, tz, birthdays):
+        """Generate calendar data for current month with birthday highlights"""
+        now = datetime.now(tz)
+        current_year = now.year
+        current_month = now.month
+        current_day = now.day
+
+        # Get calendar for current month
+        cal = calendar.monthcalendar(current_year, current_month)
+        month_name = now.strftime("%B %Y")
+
+        # Create set of birthday dates in current month
+        birthday_days = set()
+        for birthday in birthdays:
+            # Parse birthday date to get day of month
+            date_str = birthday.get('date', '')
+            try:
+                # Try parsing month-day format
+                if '-' in date_str:
+                    parts = date_str.split('-')
+                    if len(parts) >= 2:
+                        month = int(parts[0]) if len(parts) == 2 else int(parts[1])
+                        day = int(parts[1]) if len(parts) == 2 else int(parts[2])
+                        if month == current_month:
+                            birthday_days.add(day)
+            except:
+                continue
+
+        # Format calendar weeks
+        weeks = []
+        for week in cal:
+            week_data = []
+            for day in week:
+                if day == 0:
+                    week_data.append({'day': '', 'is_current': False, 'is_birthday': False})
+                else:
+                    week_data.append({
+                        'day': str(day),
+                        'is_current': day == current_day,
+                        'is_birthday': day in birthday_days
+                    })
+            weeks.append(week_data)
+
+        return {
+            'month_name': month_name,
+            'weeks': weeks,
+            'weekday_headers': ['M', 'T', 'W', 'T', 'F', 'S', 'S']  # Monday start
+        }
 
     def parse_weather_data(self, weather_data, aqi_data, tz, units, time_format):
         """Parse OpenWeatherMap data"""
