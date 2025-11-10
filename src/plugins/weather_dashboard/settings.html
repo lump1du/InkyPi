@@ -54,6 +54,46 @@
 </div>
 
 <div class="separator"></div>
+<h3 class="section-header">Right Panel Display</h3>
+
+<div class="form-group">
+    <label class="form-label">Show below birthdays:</label>
+    <div class="form-group">
+        <input type="radio" id="display-calendar" name="rightPanelDisplay" value="calendar" checked>
+        <label for="display-calendar">Calendar</label>
+
+        <input type="radio" id="display-transit" name="rightPanelDisplay" value="transit">
+        <label for="display-transit">Transit Departures</label>
+    </div>
+</div>
+
+<div class="separator"></div>
+<h3 class="section-header">Transit Settings</h3>
+
+<div class="form-group">
+    <label for="transitStationId" class="form-label">Station ID:</label>
+    <input type="text" id="transitStationId" name="transitStationId" class="form-input" placeholder="900053301" />
+    <small>Hennigsdorf (b Berlin): 900053301. <a href="https://v6.vbb.transport.rest/locations?query=Hennigsdorf" target="_blank">Find your station</a></small>
+</div>
+
+<div class="form-group">
+    <label for="transitLines" class="form-label">Lines to show (comma-separated):</label>
+    <input type="text" id="transitLines" name="transitLines" class="form-input" placeholder="X36,S25,RE" />
+    <small>Example: X36,S25,RE6 - Leave empty to show all lines</small>
+</div>
+
+<div class="form-group">
+    <label for="transitDirection" class="form-label">Direction filter (optional):</label>
+    <input type="text" id="transitDirection" name="transitDirection" class="form-input" placeholder="Charlottenburg" />
+    <small>Only show departures heading towards this destination</small>
+</div>
+
+<div class="form-group">
+    <label for="transitDuration" class="form-label">Show departures for next (minutes):</label>
+    <input type="number" id="transitDuration" name="transitDuration" class="form-input" value="60" min="10" max="180" />
+</div>
+
+<div class="separator"></div>
 <h3 class="section-header">Countdown Settings</h3>
 
 <div class="form-group">

@@ -385,6 +385,76 @@
   color: #FF0000;
 }
 
+/* Transit Display */
+.transit {
+  margin-top: 1dvh;
+  width: 100%;
+}
+
+.transit-header {
+  font-size: min(2dvh, 1.5vw);
+  font-weight: bold;
+  text-align: center;
+  color: #000000;
+  margin-bottom: 0.5dvh;
+}
+
+.transit-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3dvh;
+}
+
+.transit-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 0.5vw;
+  padding: 0.5dvh 0.5vw;
+  border-bottom: 2px solid rgba(80, 80, 80, 0.8);
+  align-items: center;
+}
+
+.transit-item:last-child {
+  border-bottom: none;
+}
+
+.transit-line {
+  font-size: min(2dvh, 1.5vw);
+  font-weight: 700;
+  color: #000000;
+  white-space: nowrap;
+  min-width: 3vw;
+}
+
+.transit-direction {
+  font-size: min(1.8dvh, 1.3vw);
+  color: #000000;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+.transit-time {
+  font-size: min(2dvh, 1.5vw);
+  font-weight: 700;
+  color: #000000;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.transit-delay {
+  color: #FF0000;  /* RED - native e-ink color for emphasis */
+  font-weight: 700;
+  margin-left: 0.3vw;
+}
+
+/* Delayed train indicator - RED left border */
+.transit-delayed {
+  border-left: 3px solid #FF0000;
+  padding-left: 0.3vw;
+}
+
 /* BOTTOM QUARTER: Countdown */
 .countdown-section {
   display: flex;

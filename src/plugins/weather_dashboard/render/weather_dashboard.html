@@ -93,6 +93,7 @@
       {% endif %}
 
       <!-- Calendar -->
+      {% if show_calendar %}
       <div class="calendar">
         <div class="calendar-header">{{ calendar_data['month_name'] }}</div>
         <div class="calendar-grid">
@@ -110,6 +111,36 @@
           {% endfor %}
         </div>
       </div>
+      {% endif %}
+
+      <!-- Transit Departures -->
+      {% if show_transit %}
+      <div class="transit">
+        <div class="transit-header">Departures</div>
+        {% if transit_data and transit_data['departures'] %}
+        <div class="transit-list">
+          {% for dep in transit_data['departures'] %}
+          <div class="transit-item {% if dep['is_delayed'] %}transit-delayed{% endif %}">
+            <span class="transit-line">{{ dep['line'] }}</span>
+            <span class="transit-direction">{{ dep['direction'][:25] }}{% if dep['direction']|length > 25 %}...{% endif %}</span>
+            <span class="transit-time">
+              {% if dep['minutes'] < 1 %}
+                Now
+              {% elif dep['minutes'] < 10 %}
+                {{ dep['minutes'] }} min
+              {% else %}
+                {{ dep['time'] }}
+              {% endif %}
+              {% if dep['is_delayed'] %}<span class="transit-delay">+{{ dep['delay'] }}</span>{% endif %}
+            </span>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <div class="no-data">No departures</div>
+        {% endif %}
+      </div>
+      {% endif %}
     </div>
 
     <!-- BOTTOM QUARTER: Countdown -->
