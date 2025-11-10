@@ -91,6 +91,25 @@
       {% else %}
       <div class="no-data">No upcoming birthdays</div>
       {% endif %}
+
+      <!-- Calendar -->
+      <div class="calendar">
+        <div class="calendar-header">{{ calendar_data['month_name'] }}</div>
+        <div class="calendar-grid">
+          <!-- Weekday headers -->
+          {% for weekday in calendar_data['weekday_headers'] %}
+          <div class="calendar-weekday">{{ weekday }}</div>
+          {% endfor %}
+          <!-- Calendar days -->
+          {% for week in calendar_data['weeks'] %}
+            {% for day_data in week %}
+              <div class="calendar-day {% if day_data['is_current'] %}calendar-day-current{% endif %} {% if day_data['is_birthday'] %}calendar-day-birthday{% endif %}">
+                {{ day_data['day'] }}
+              </div>
+            {% endfor %}
+          {% endfor %}
+        </div>
+      </div>
     </div>
 
     <!-- BOTTOM QUARTER: Countdown -->
