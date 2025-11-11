@@ -322,7 +322,7 @@ class WeatherDashboard(BasePlugin):
 
             return {
                 'station_id': station_id,
-                'departures': departures[:8],  # Limit to 8 visible departures
+                'departures': departures[:5],  # Limit to 5 visible departures to prevent overflow
                 'count': len(departures)
             }
 

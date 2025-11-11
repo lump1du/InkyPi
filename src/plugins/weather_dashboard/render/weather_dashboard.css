@@ -323,6 +323,10 @@
 .calendar {
   margin-top: 1dvh;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  max-height: 100%;
+  overflow: hidden;
 }
 
 .calendar-header {
@@ -331,6 +335,7 @@
   text-align: center;
   color: #000000;
   margin-bottom: 0.5dvh;
+  flex-shrink: 0;
 }
 
 .calendar-grid {
@@ -339,6 +344,9 @@
   gap: 1px;
   background: #000000;
   border: 2px solid #000000;
+  overflow: hidden;
+  flex: 1;
+  min-height: 0;
 }
 
 .calendar-weekday {
@@ -389,6 +397,10 @@
 .transit {
   margin-top: 1dvh;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  max-height: 100%;
+  overflow: hidden;
 }
 
 .transit-header {
@@ -397,12 +409,16 @@
   text-align: center;
   color: #000000;
   margin-bottom: 0.5dvh;
+  flex-shrink: 0;
 }
 
 .transit-list {
   display: flex;
   flex-direction: column;
   gap: 0.3dvh;
+  overflow: hidden;
+  flex: 1;
+  min-height: 0;
 }
 
 .transit-item {
