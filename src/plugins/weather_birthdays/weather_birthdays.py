@@ -433,37 +433,6 @@ class WeatherBirthdays(BasePlugin):
             "icon": os.path.join(icon_dir, 'icons/humidity.png')
         })
 
-        data_points.append({
-            "label": "Pressure",
-            "measurement": weather.get('current', {}).get("pressure"),
-            "unit": 'hPa',
-            "icon": os.path.join(icon_dir, 'icons/pressure.png')
-        })
-
-        data_points.append({
-            "label": "UV Index",
-            "measurement": weather.get('current', {}).get("uvi"),
-            "unit": '',
-            "icon": os.path.join(icon_dir, 'icons/uvi.png')
-        })
-
-        visibility = weather.get('current', {}).get("visibility")/1000
-        visibility_str = f">{visibility}" if visibility >= 10 else visibility
-        data_points.append({
-            "label": "Visibility",
-            "measurement": visibility_str,
-            "unit": 'km',
-            "icon": os.path.join(icon_dir, 'icons/visibility.png')
-        })
-
-        aqi = air_quality.get('list', [])[0].get("main", {}).get("aqi")
-        data_points.append({
-            "label": "Air Quality",
-            "measurement": aqi,
-            "unit": ["Good", "Fair", "Moderate", "Poor", "Very Poor"][int(aqi)-1],
-            "icon": os.path.join(icon_dir, 'icons/aqi.png')
-        })
-
         return data_points
 
     def parse_open_meteo_data_points(self, weather_data, aqi_data, tz, units, time_format, icon_dir):
@@ -514,82 +483,6 @@ class WeatherBirthdays(BasePlugin):
         data_points.append({
             "label": "Humidity", "measurement": current_humidity, "unit": '%',
             "icon": os.path.join(icon_dir, 'icons/humidity.png')
-        })
-
-        current_pressure = "N/A"
-        pressure_hourly_times = hourly_data.get('time', [])
-        pressure_values = hourly_data.get('surface_pressure', [])
-        for i, time_str in enumerate(pressure_hourly_times):
-            try:
-                if datetime.fromisoformat(time_str).astimezone(tz).hour == current_time.hour:
-                    current_pressure = int(pressure_values[i])
-                    break
-            except ValueError:
-                continue
-        data_points.append({
-            "label": "Pressure", "measurement": current_pressure, "unit": 'hPa',
-            "icon": os.path.join(icon_dir, 'icons/pressure.png')
-        })
-
-        uv_index_hourly_times = aqi_data.get('hourly', {}).get('time', [])
-        uv_index_values = aqi_data.get('hourly', {}).get('uv_index', [])
-        current_uv_index = "N/A"
-        for i, time_str in enumerate(uv_index_hourly_times):
-            try:
-                if datetime.fromisoformat(time_str).astimezone(tz).hour == current_time.hour:
-                    current_uv_index = uv_index_values[i]
-                    break
-            except ValueError:
-                continue
-        data_points.append({
-            "label": "UV Index", "measurement": current_uv_index, "unit": '',
-            "icon": os.path.join(icon_dir, 'icons/uvi.png')
-        })
-
-        current_visibility = "N/A"
-        visibility_hourly_times = hourly_data.get('time', [])
-        visibility_values = hourly_data.get('visibility', [])
-        unit_label = "km"
-        for i, time_str in enumerate(visibility_hourly_times):
-            try:
-                if datetime.fromisoformat(time_str).astimezone(tz).hour == current_time.hour:
-                    visibility = visibility_values[i]
-                    if units == "imperial":
-                        current_visibility = int(round(visibility, 0))
-                        unit_label = "ft"
-                    else:
-                        current_visibility = round(visibility / 1000, 1)
-                        unit_label = "km"
-                    break
-            except ValueError:
-                continue
-
-        visibility_str = f">{current_visibility}" if isinstance(current_visibility, (int, float)) and (
-            (units == "imperial" and current_visibility >= 32808) or
-            (units != "imperial" and current_visibility >= 10)
-        ) else current_visibility
-
-        data_points.append({
-            "label": "Visibility", "measurement": visibility_str, "unit": unit_label,
-            "icon": os.path.join(icon_dir, 'icons/visibility.png')
-        })
-
-        aqi_hourly_times = aqi_data.get('hourly', {}).get('time', [])
-        aqi_values = aqi_data.get('hourly', {}).get('european_aqi', [])
-        current_aqi = "N/A"
-        scale = ""
-        for i, time_str in enumerate(aqi_hourly_times):
-            try:
-                if datetime.fromisoformat(time_str).astimezone(tz).hour == current_time.hour:
-                    current_aqi = round(aqi_values[i], 1)
-                    break
-            except ValueError:
-                continue
-        if current_aqi != "N/A":
-            scale = ["Good","Fair","Moderate","Poor","Very Poor","Ext Poor"][min(int(current_aqi)//20,5)]
-        data_points.append({
-            "label": "Air Quality", "measurement": current_aqi,
-            "unit": scale, "icon": os.path.join(icon_dir, 'icons/aqi.png')
         })
 
         return data_points
