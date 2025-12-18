@@ -55,15 +55,17 @@
           <div class="birthday-name">
             {{ birthday['name'] }}{% if birthday['age'] is defined %} <span class="birthday-age">({{ birthday['age'] }})</span>{% endif %}
           </div>
-          <div class="birthday-date">{{ birthday['date'] }}</div>
-          <div class="birthday-countdown">
-            {% if days == 0 %}
-              Today!
-            {% elif days == 1 %}
-              Tomorrow
-            {% else %}
-              in {{ days }} days
-            {% endif %}
+          <div class="birthday-details">
+            <div class="birthday-date">{{ birthday['date'] }}</div>
+            <div class="birthday-countdown">
+              {% if days == 0 %}
+                Today!
+              {% elif days == 1 %}
+                Tomorrow
+              {% else %}
+                in {{ days }} days
+              {% endif %}
+            </div>
           </div>
         </div>
         {% endfor %}
