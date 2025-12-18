@@ -169,8 +169,8 @@
           type: 'line',
           label: 'Hourly Temperature',
           data: temperatures,
-          borderColor: 'rgba(241, 122, 36, 0.9)',
-          borderWidth: 2,
+          borderColor: 'rgba(241, 122, 36, 1)',
+          borderWidth: 3,
           pointRadius: 0,
           fill: true,
           tension: 0.5
@@ -181,7 +181,7 @@
           data: precipitation,
           borderColor: 'rgba(26, 111, 176, 1)',
           borderWidth: {
-            top: 2,
+            top: 3,
             right: 0,
             bottom: 0,
             left: 0
@@ -278,13 +278,15 @@
     const gradientEnd = chart.scales['y'].getPixelForValue(minTemp);
 
     const tempGradient = ctx.createLinearGradient(0, gradientStart, 0, gradientEnd+10);
-    tempGradient.addColorStop(0, 'rgba(252,204,5, 0.95)');
-    tempGradient.addColorStop(1, 'rgba(252,204,5, 0.01)');
+    tempGradient.addColorStop(0, 'rgba(252,204,5, 0.85)');
+    tempGradient.addColorStop(0.3, 'rgba(252,204,5, 0.6)');
+    tempGradient.addColorStop(1, 'rgba(252,204,5, 0.05)');
     chart.data.datasets[0].backgroundColor = tempGradient;
 
     const precipitationGradient = ctx.createLinearGradient(0, gradientStart, 0, gradientEnd);
-    precipitationGradient.addColorStop(0, 'rgba(26, 111, 176, 0.8)');
-    precipitationGradient.addColorStop(1, 'rgba(194, 223, 246, 0)');
+    precipitationGradient.addColorStop(0, 'rgba(26, 111, 176, 0.7)');
+    precipitationGradient.addColorStop(0.5, 'rgba(26, 111, 176, 0.4)');
+    precipitationGradient.addColorStop(1, 'rgba(194, 223, 246, 0.05)');
     chart.data.datasets[1].backgroundColor = precipitationGradient;
 
     chart.update();
