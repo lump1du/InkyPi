@@ -15,31 +15,33 @@
   </div>
 
   <div class="main-content">
-    <!-- Current Weather Section -->
-    <div class="current-weather-section">
-      <div class="current-temperature">
-        <img class="current-icon" src="{{current_day_icon}}" alt="Current Weather Icon">
-        <div class="current-weather">
-          <div class="current-temp">{{ current_temperature }}<span class="temperature-unit">{{temperature_unit}}</span></div>
-          <div class="feels-like">Feels Like {{ feels_like }}{% if units != "standard" %}°{% endif %}</div>
-          <div class="min-max">{{ forecast[0].high }}{% if units != "standard" %}°{% endif %} / {{ forecast[0].low }}{% if units != "standard" %}°{% endif %}</div>
-        </div>
-      </div>
-
-      <!-- Data Points Grid -->
-      {% if plugin_settings.displayMetrics and plugin_settings.displayMetrics == "true" %}
-      <div class="data-points">
-        {% for dp in data_points %}
-          <div class="data-point">
-            <img class="data-point-icon" src="{{dp.icon}}" alt="{{ dp.label }}">
-            <div class="data-point-data">
-              <div class="data-point-label">{{ dp.label }}</div>
-              <div class="data-point-measurement">{{ dp.measurement }}{% if dp.unit %}<span class="data-point-unit">{{ dp.unit }}</span>{% endif %}</div>
-            </div>
+    <!-- Main Weather Box -->
+    <div class="weather-box">
+      <div class="current-weather-section">
+        <div class="current-temperature">
+          <img class="current-icon" src="{{current_day_icon}}" alt="Current Weather Icon">
+          <div class="current-weather">
+            <div class="current-temp">{{ current_temperature }}<span class="temperature-unit">{{temperature_unit}}</span></div>
+            <div class="feels-like">Feels Like {{ feels_like }}{% if units != "standard" %}°{% endif %}</div>
+            <div class="min-max">{{ forecast[0].high }}{% if units != "standard" %}°{% endif %} / {{ forecast[0].low }}{% if units != "standard" %}°{% endif %}</div>
           </div>
-        {% endfor %}
+        </div>
+
+        <!-- Essential Metrics Grid -->
+        {% if plugin_settings.displayMetrics and plugin_settings.displayMetrics == "true" %}
+        <div class="data-points">
+          {% for dp in data_points %}
+            <div class="data-point">
+              <img class="data-point-icon" src="{{dp.icon}}" alt="{{ dp.label }}">
+              <div class="data-point-data">
+                <div class="data-point-label">{{ dp.label }}</div>
+                <div class="data-point-measurement">{{ dp.measurement }}{% if dp.unit %}<span class="data-point-unit">{{ dp.unit }}</span>{% endif %}</div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+        {% endif %}
       </div>
-      {% endif %}
     </div>
 
     <!-- Birthdays Section -->

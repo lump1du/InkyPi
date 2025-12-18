@@ -21,178 +21,190 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
 
 .title {
-  font-size: 32px;
-  font-weight: 600;
+  font-size: 40px;
+  font-weight: 700;
 }
 
 .current-date {
-  font-size: 24px;
-  font-weight: 400;
+  font-size: 28px;
+  font-weight: 500;
 }
 
 /* Main Content - Weather and Birthdays side by side */
 .main-content {
   display: flex;
   gap: 30px;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
+}
+
+/* Weather Box - Main container for current weather */
+.weather-box {
+  flex: 1;
+  padding: 25px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.15);
 }
 
 /* Current Weather Section */
 .current-weather-section {
-  flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 30px;
 }
 
 .current-temperature {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 30px;
 }
 
 .current-icon {
-  width: 120px;
-  height: 120px;
+  width: 160px;
+  height: 160px;
 }
 
 .current-weather {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 8px;
 }
 
 .current-temp {
-  font-size: 64px;
+  font-size: 96px;
   font-weight: 700;
-  line-height: 1;
+  line-height: 0.9;
 }
 
 .temperature-unit {
-  font-size: 32px;
+  font-size: 48px;
   font-weight: 400;
-  margin-left: 5px;
+  margin-left: 8px;
 }
 
 .feels-like {
-  font-size: 20px;
+  font-size: 28px;
   font-weight: 400;
   opacity: 0.8;
 }
 
 .min-max {
-  font-size: 22px;
-  font-weight: 500;
+  font-size: 32px;
+  font-weight: 600;
   opacity: 0.9;
 }
 
-/* Data Points Grid */
+/* Data Points Grid - Now 2x2 for 4 essential metrics */
 .data-points {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 15px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 25px;
+  padding-top: 20px;
+  border-top: 2px solid rgba(255, 255, 255, 0.15);
 }
 
 .data-point {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 15px;
 }
 
 .data-point-icon {
-  width: 32px;
-  height: 32px;
+  width: 48px;
+  height: 48px;
 }
 
 .data-point-data {
   display: flex;
   flex-direction: column;
+  gap: 2px;
 }
 
 .data-point-label {
-  font-size: 14px;
+  font-size: 20px;
   opacity: 0.7;
+  font-weight: 500;
 }
 
 .data-point-measurement {
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 28px;
+  font-weight: 700;
 }
 
 .data-point-unit {
-  font-size: 14px;
-  font-weight: 400;
-  margin-left: 3px;
+  font-size: 20px;
+  font-weight: 500;
+  margin-left: 4px;
 }
 
 /* Birthdays Section */
 .birthdays-section {
-  flex: 0 0 350px;
+  flex: 0 0 380px;
   display: flex;
   flex-direction: column;
-  padding: 20px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 15px;
-  border: 2px solid rgba(255, 255, 255, 0.1);
+  padding: 25px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.15);
 }
 
 .birthdays-header {
-  font-size: 24px;
-  font-weight: 600;
-  margin-bottom: 15px;
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 20px;
   text-align: center;
 }
 
 .birthdays-list {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 18px;
 }
 
 .birthday-item {
   display: flex;
   flex-direction: column;
-  padding: 15px;
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 10px;
-  border-left: 4px solid rgba(255, 215, 0, 0.6);
+  padding: 18px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  border-left: 5px solid rgba(255, 215, 0, 0.7);
 }
 
 .birthday-item.birthday-today {
   border-left-color: rgba(255, 100, 100, 0.9);
-  background: rgba(255, 100, 100, 0.1);
+  background: rgba(255, 100, 100, 0.12);
 }
 
 .birthday-item.birthday-soon {
-  border-left-color: rgba(255, 165, 0, 0.8);
-  background: rgba(255, 165, 0, 0.05);
+  border-left-color: rgba(255, 165, 0, 0.85);
+  background: rgba(255, 165, 0, 0.08);
 }
 
 .birthday-name {
-  font-size: 20px;
-  font-weight: 600;
-  margin-bottom: 5px;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 6px;
 }
 
 .birthday-age {
-  font-size: 16px;
+  font-size: 20px;
   font-weight: 400;
   opacity: 0.8;
 }
 
 .birthday-date {
-  font-size: 16px;
+  font-size: 20px;
   opacity: 0.7;
-  margin-bottom: 5px;
+  margin-bottom: 6px;
 }
 
 .birthday-countdown {
-  font-size: 18px;
-  font-weight: 500;
+  font-size: 22px;
+  font-weight: 600;
   color: rgba(255, 215, 0, 0.9);
 }
 
@@ -207,15 +219,15 @@
 
 /* Chart Container */
 .chart-container {
-  height: 200px;
-  margin-bottom: 20px;
+  height: 220px;
+  margin-bottom: 25px;
 }
 
 /* Forecast */
 .forecast {
   display: flex;
   justify-content: space-between;
-  gap: 10px;
+  gap: 12px;
 }
 
 .forecast-day {
@@ -223,26 +235,27 @@
   flex-direction: column;
   align-items: center;
   flex: 1;
-  padding: 10px;
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 10px;
+  padding: 15px 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
 }
 
 .forecast-day-name {
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 10px;
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 12px;
 }
 
 .forecast-icon {
-  width: 48px;
-  height: 48px;
-  margin-bottom: 10px;
+  width: 64px;
+  height: 64px;
+  margin-bottom: 12px;
 }
 
 .forecast-temps {
-  font-size: 16px;
-  font-weight: 500;
+  font-size: 20px;
+  font-weight: 600;
 }
 
 .forecast-temps .high {
