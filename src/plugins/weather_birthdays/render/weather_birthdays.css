@@ -53,15 +53,19 @@
 /* Current Weather Section */
 .current-weather-section {
   display: flex;
-  flex-direction: column;
-  gap: 16px;
+  flex-direction: row;
+  gap: 25px;
+  align-items: flex-start;
 }
 
 .current-temperature {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  gap: 22px;
+  gap: 15px;
+  flex-shrink: 0;
+  width: 220px;
 }
 
 .current-icon {
@@ -74,12 +78,14 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  align-items: center;
 }
 
 .current-temp {
   font-size: 96px;
   font-weight: 700;
   line-height: 0.9;
+  text-align: center;
 }
 
 .temperature-unit {
@@ -89,24 +95,25 @@
 }
 
 .feels-like {
-  font-size: 30px;
+  font-size: 28px;
   font-weight: 600;
   opacity: 0.85;
+  text-align: center;
 }
 
 .min-max {
-  font-size: 34px;
+  font-size: 32px;
   font-weight: 700;
   opacity: 1;
+  text-align: center;
 }
 
-/* Data Points Grid - 3x2 for 6 essential metrics */
+/* Data Points Grid - 2x3 for 6 essential metrics */
 .data-points {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px 20px;
-  padding-top: 16px;
-  border-top: 3px solid rgba(255, 255, 255, 0.25);
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px 25px;
+  flex: 1;
 }
 
 .data-point {
