@@ -59,7 +59,7 @@
 
 .current-temperature {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: flex-start;
   gap: 22px;
 }
@@ -68,7 +68,6 @@
   width: 145px;
   height: 145px;
   flex-shrink: 0;
-  margin-top: 10px;
 }
 
 .current-weather {
@@ -117,8 +116,8 @@
 }
 
 .data-point-icon {
-  width: 52px;
-  height: 52px;
+  width: 56px;
+  height: 56px;
   flex-shrink: 0;
 }
 
@@ -138,20 +137,20 @@
 }
 
 .data-point-measurement {
-  font-size: 34px;
+  font-size: 38px;
   font-weight: 700;
   line-height: 1;
 }
 
 .data-point-unit {
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 600;
   margin-left: 4px;
 }
 
 /* Birthdays Section */
 .birthdays-section {
-  flex: 0 0 300px;
+  flex: 0 0 315px;
   display: flex;
   flex-direction: column;
   padding: 16px;
@@ -243,7 +242,7 @@
 
 /* Chart Container */
 .chart-container {
-  height: 220px;
+  height: 240px;
   margin-bottom: 18px;
 }
 
@@ -259,26 +258,26 @@
   flex-direction: column;
   align-items: center;
   flex: 1;
-  padding: 14px 10px;
+  padding: 15px 10px;
   background: rgba(255, 255, 255, 0.08);
   border-radius: 12px;
   border: 3px solid rgba(255, 255, 255, 0.2);
 }
 
 .forecast-day-name {
-  font-size: 26px;
+  font-size: 28px;
   font-weight: 700;
   margin-bottom: 10px;
 }
 
 .forecast-icon {
-  width: 68px;
-  height: 68px;
+  width: 70px;
+  height: 70px;
   margin-bottom: 10px;
 }
 
 .forecast-temps {
-  font-size: 24px;
+  font-size: 26px;
   font-weight: 700;
 }
 
@@ -302,11 +301,11 @@
   display: flex;
   align-items: center;
   gap: 5px;
-  font-size: 17px;
+  font-size: 18px;
   font-weight: 600;
 }
 
 .moon-phase-icon {
-  width: 26px;
-  height: 26px;
+  width: 28px;
+  height: 28px;
 }
