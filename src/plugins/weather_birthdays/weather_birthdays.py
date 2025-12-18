@@ -433,6 +433,34 @@ class WeatherBirthdays(BasePlugin):
             "icon": os.path.join(icon_dir, 'icons/humidity.png')
         })
 
+        # Add UV Index
+        uv_index = weather.get('current', {}).get("uvi", 0)
+        data_points.append({
+            "label": "UV Index",
+            "measurement": round(uv_index, 1),
+            "unit": '',
+            "icon": os.path.join(icon_dir, 'icons/uvi.png')
+        })
+
+        # Add Air Quality Index
+        if air_quality and 'list' in air_quality and len(air_quality['list']) > 0:
+            aqi = air_quality['list'][0].get('main', {}).get('aqi', 'N/A')
+            aqi_labels = {1: 'Good', 2: 'Fair', 3: 'Mod', 4: 'Poor', 5: 'VPoor'}
+            aqi_label = aqi_labels.get(aqi, 'N/A')
+            data_points.append({
+                "label": "Air Qlty",
+                "measurement": aqi_label,
+                "unit": '',
+                "icon": os.path.join(icon_dir, 'icons/aqi.png')
+            })
+        else:
+            data_points.append({
+                "label": "Air Qlty",
+                "measurement": 'N/A',
+                "unit": '',
+                "icon": os.path.join(icon_dir, 'icons/aqi.png')
+            })
+
         return data_points
 
     def parse_open_meteo_data_points(self, weather_data, aqi_data, tz, units, time_format, icon_dir):
@@ -483,6 +511,58 @@ class WeatherBirthdays(BasePlugin):
         data_points.append({
             "label": "Humidity", "measurement": current_humidity, "unit": '%',
             "icon": os.path.join(icon_dir, 'icons/humidity.png')
+        })
+
+        # Add UV Index from Open-Meteo air quality data
+        current_uv = "N/A"
+        if aqi_data and 'hourly' in aqi_data:
+            uv_hourly_times = aqi_data['hourly'].get('time', [])
+            uv_values = aqi_data['hourly'].get('uv_index', [])
+            for i, time_str in enumerate(uv_hourly_times):
+                try:
+                    if datetime.fromisoformat(time_str).astimezone(tz).hour == current_time.hour:
+                        current_uv = round(uv_values[i], 1) if i < len(uv_values) else "N/A"
+                        break
+                except (ValueError, IndexError):
+                    continue
+        data_points.append({
+            "label": "UV Index",
+            "measurement": current_uv,
+            "unit": '',
+            "icon": os.path.join(icon_dir, 'icons/uvi.png')
+        })
+
+        # Add Air Quality Index from Open-Meteo air quality data
+        current_aqi = "N/A"
+        if aqi_data and 'hourly' in aqi_data:
+            aqi_hourly_times = aqi_data['hourly'].get('time', [])
+            aqi_values = aqi_data['hourly'].get('european_aqi', [])
+            for i, time_str in enumerate(aqi_hourly_times):
+                try:
+                    if datetime.fromisoformat(time_str).astimezone(tz).hour == current_time.hour:
+                        if i < len(aqi_values):
+                            aqi_val = aqi_values[i]
+                            # Convert European AQI to category
+                            if aqi_val <= 20:
+                                current_aqi = 'Good'
+                            elif aqi_val <= 40:
+                                current_aqi = 'Fair'
+                            elif aqi_val <= 60:
+                                current_aqi = 'Mod'
+                            elif aqi_val <= 80:
+                                current_aqi = 'Poor'
+                            elif aqi_val <= 100:
+                                current_aqi = 'VPoor'
+                            else:
+                                current_aqi = 'Hazard'
+                        break
+                except (ValueError, IndexError):
+                    continue
+        data_points.append({
+            "label": "Air Qlty",
+            "measurement": current_aqi,
+            "unit": '',
+            "icon": os.path.join(icon_dir, 'icons/aqi.png')
         })
 
         return data_points
