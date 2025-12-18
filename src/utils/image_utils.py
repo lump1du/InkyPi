@@ -89,6 +89,10 @@ def compute_image_hash(image):
 
 def take_screenshot_html(html_str, dimensions, timeout_ms=None):
     image = None
+    # Default timeout of 15 seconds for pages with external resources (like CDN scripts)
+    if timeout_ms is None:
+        timeout_ms = 15000
+
     try:
         # Create a temporary HTML file
         with tempfile.NamedTemporaryFile(suffix=".html", delete=False) as html_file:
@@ -107,10 +111,15 @@ def take_screenshot_html(html_str, dimensions, timeout_ms=None):
 
 def take_screenshot(target, dimensions, timeout_ms=None):
     image = None
+    img_file_path = None
     try:
         # Create a temporary output file for the screenshot
         with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as img_file:
             img_file_path = img_file.name
+
+        # Default timeout of 10 seconds if not specified
+        if timeout_ms is None:
+            timeout_ms = 10000
 
         command = [
             "chromium-headless-shell",
@@ -118,6 +127,7 @@ def take_screenshot(target, dimensions, timeout_ms=None):
             "--headless",
             f"--screenshot={img_file_path}",
             f"--window-size={dimensions[0]},{dimensions[1]}",
+            f"--timeout={timeout_ms}",
             "--disable-dev-shm-usage",
             "--disable-gpu",
             "--use-gl=swiftshader",
@@ -129,27 +139,54 @@ def take_screenshot(target, dimensions, timeout_ms=None):
             "--disable-extensions",
             "--disable-plugins",
             "--mute-audio",
-            "--no-sandbox"
+            "--no-sandbox",
+            "--virtual-time-budget=10000"
         ]
-        if timeout_ms:
-            command.append(f"--timeout={timeout_ms}")
+
         result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-        # Check if the process failed or the output file is missing
-        if result.returncode != 0 or not os.path.exists(img_file_path):
-            logger.error("Failed to take screenshot:")
+        # Check if the process failed
+        if result.returncode != 0:
+            logger.error("Chromium process failed:")
             logger.error(result.stderr.decode('utf-8'))
+            if result.stdout:
+                logger.error(result.stdout.decode('utf-8'))
             return None
 
-        # Load the image using PIL
-        with Image.open(img_file_path) as img:
-            image = img.copy()
+        # Check if the output file exists
+        if not os.path.exists(img_file_path):
+            logger.error(f"Screenshot file was not created: {img_file_path}")
+            return None
+
+        # Check if the file has content
+        file_size = os.path.getsize(img_file_path)
+        if file_size == 0:
+            logger.error(f"Screenshot file is empty (0 bytes): {img_file_path}")
+            return None
+
+        # Try to load the image using PIL
+        try:
+            with Image.open(img_file_path) as img:
+                image = img.copy()
+        except Exception as img_error:
+            logger.error(f"Failed to open screenshot file as image (file size: {file_size} bytes): {str(img_error)}")
+            # Log first few bytes for debugging
+            with open(img_file_path, 'rb') as f:
+                header = f.read(min(100, file_size))
+                logger.error(f"File header (first {len(header)} bytes): {header[:50]}")
+            return None
 
         # Remove image files
         os.remove(img_file_path)
 
     except Exception as e:
         logger.error(f"Failed to take screenshot: {str(e)}")
+        # Clean up temp file if it exists
+        if img_file_path and os.path.exists(img_file_path):
+            try:
+                os.remove(img_file_path)
+            except:
+                pass
 
     return image
 
